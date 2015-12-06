@@ -1,4 +1,6 @@
 ﻿// WEATHER
+// Source: http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/
+
 IMPORT Std;
 IMPORT Weather.Util AS Util;
 
