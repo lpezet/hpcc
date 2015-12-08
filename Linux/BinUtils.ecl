@@ -1,7 +1,7 @@
+﻿
 
 
-
-BinUtils := MODULE
+EXPORT BinUtils := MODULE
 
 	EXPORT line_layout := RECORD
 		STRING line;

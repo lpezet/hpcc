@@ -1,5 +1,6 @@
+﻿IMPORT Linux.BinUtils;
 
-Curl := MODULE
+EXPORT Curl := MODULE
 
 
 	EXPORT curl_layout := RECORD
