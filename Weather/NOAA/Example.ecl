@@ -10,7 +10,7 @@ IMPORT Weather.NOAA.Feed.Extract;
 
 oExt := Extract;
 
-//oExt.stations.doIt();
+oExt.stations.doIt();
 
 oTx := Tranxform;
 //oTx.stations.doIt();
