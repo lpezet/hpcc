@@ -1,6 +1,6 @@
 ﻿IMPORT Weather.NOAA.Rest;
 
-oClient := Rest.Services('http://192.168.0.29:8082/cdo-web/api/v2/', 'alpPJbBLKfjyqsycInlUmLsgLxhDNDAE');
+oClient := Rest.Services('http://192.168.0.29:8082/cdo-web/api/v2/', '...');
 
 oStations := oClient.get_stations(pLocationId := 'FIPS:37');
 //oStations.metadata;
