@@ -1,5 +1,35 @@
 ﻿EXPORT Layouts := MODULE
 
+	EXPORT station_inventory_layout := RECORD
+		STRING11 id;
+		DECIMAL9_6 latitude;
+		DECIMAL9_6 longitude;
+		STRING4 element;
+		INTEGER4 first_year;
+		INTEGER4 last_year;
+	END;
+
+	/*
+	------------------------------
+	Variable   Columns   Type
+	------------------------------
+	ID            1-11   Character
+	LATITUDE     13-20   Real
+	LONGITUDE    22-30   Real
+	ELEMENT      32-35   Character
+	FIRSTYEAR    37-40   Integer
+	LASTYEAR     42-45   Integer
+	------------------------------
+	*/
+	EXPORT raw_station_inventory_layout := RECORD
+		STRING11 id;
+		STRING10 latitude;
+		STRING10 longitude;
+		STRING4 element;
+		STRING5 first_year;
+		STRING5 last_year;
+		STRING1 garbage;
+	END;
 	
 	EXPORT station_layout := RECORD
 		STRING11 id;
@@ -142,7 +172,6 @@
 		STRING1 mflag31;
 		STRING1 qflag31;
 		STRING1 sflag31;
-		STRING1 garbage;
 	END;
 	
 	

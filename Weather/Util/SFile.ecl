@@ -36,7 +36,7 @@ EXPORT SFile := MODULE
 	EXPORT AddSub(STRING pSuperFile, STRING pSub) := FUNCTION
 		RETURN SEQUENTIAL(
 			Std.File.StartSuperFileTransaction(),
-			Std.File.RemoveSuperFile(pSuperFile, pSub),
+			//Std.File.RemoveSuperFile(pSuperFile, pSub),
 			Std.File.AddSuperFile(pSuperFile, pSub),
 			//Std.File.ReplaceSuperFile(pSuperFile, pSub),
 			Std.File.FinishSuperFileTransaction()
