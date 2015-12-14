@@ -3,7 +3,7 @@
 EXPORT Curl := MODULE
 
 
-	EXPORT curl_layout := RECORD
+	EXPORT info_layout := RECORD
 		STRING content_type; 					// The Content-Type of the requested document, if there was any.
 		//STRING filename_effective; 	// The ultimate filename that curl writes out to. This is only meaningful if curl is told to write to a file with the --remote-name or --output option. It's most useful in combination with the --remote-header-name option. (Added in 7.25.1)
 		STRING ftp_entry_path;				// The initial path curl ended up in when logging on to the remote FTP server. (Added in 7.15.4)
@@ -32,7 +32,20 @@ EXPORT Curl := MODULE
 		REAL time_total;							// The total time, in seconds, that the full operation lasted. The time will be displayed with millisecond resolution.
 		STRING url_effective;					// The URL that was fetched last. This is most meaningful if you've told curl to follow location: headers.
 	END;
-
+	
+	EXPORT batch_info_layout := RECORD
+		STRING remoteUri;
+		STRING localUri;
+		info_layout;
+	END;
+	
+	EXPORT batch_layout := RECORD
+		STRING remoteUri;
+		STRING localUri;
+		BOOLEAN ssl;
+	END;
+	
+	
 	SHARED mFormat := '%{content_type}\t%{ftp_entry_path}\t%{http_code}\t%{http_connect}\t%{num_connects}\t%{num_redirects}\t"%{redirect_url}"\t%{size_download}\t%{size_header}\t%{size_request}\t%{size_upload}\t%{speed_download}\t%{speed_upload}\t%{ssl_verify_result}\t%{time_appconnect}\t%{time_connect}\t%{time_namelookup}\t%{time_pretransfer}\t%{time_redirect}\t%{time_starttransfer}\t%{time_total}\t"%{url_effective}"';
 	//SHARED mFormat := '%{content_type},%{ftp_entry_path},%{http_code},%{http_connect},%{num_connects},%{num_redirects},"%{redirect_url}",%{size_download},%{size_header},%{size_request},%{size_upload},%{speed_download},%{speed_upload},%{ssl_verify_result},%{time_appconnect},%{time_connect},%{time_namelookup},%{time_pretransfer},%{time_redirect},%{time_starttransfer},%{time_total},"%{url_effective}"';
 	//PIPE('curl -w \'' + format + '\' -s -o /dev/null http://www.centos.org', curl_layout, CSV);
@@ -40,11 +53,20 @@ EXPORT Curl := MODULE
 	EXPORT download(
 		STRING remoteUri,
 		STRING localUri,
-		BOOLEAN ssl = false) := PIPE('curl -w \'' + mFormat + '\' -s -o ' + localUri + ' "' + remoteUri + '"', curl_layout, CSV(SEPARATOR('\t')) );
+		BOOLEAN ssl = false) := PIPE('curl -w \'' + mFormat + '\' -s -o ' + localUri + ' "' + remoteUri + '"', info_layout, CSV(SEPARATOR('\t')) );
 		
 	EXPORT download_to_dataset(
 		STRING remoteUri,
 		BOOLEAN ssl = false) := PIPE('curl -s -o - "' + remoteUri + '"', Binutils.line_layout, CSV(SEPARATOR(''), QUOTE('')) );
+		
+	SHARED batch_info_layout BatchDownload (batch_layout pInput) := TRANSFORM
+		SELF.remoteUri := pInput.remoteUri;
+		SELF.localUri := pInput.localUri;
+		SELF := download(pInput.remoteUri, pInput.localUri, pInput.ssl)[1];
+	END;
+
+	EXPORT batch_download(
+		DATASET(batch_layout) batch) := NORMALIZE( batch, 1, BatchDownload(LEFT) );
 		
 END;
 
