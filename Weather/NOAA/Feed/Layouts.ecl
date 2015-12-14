@@ -1,5 +1,45 @@
 ﻿EXPORT Layouts := MODULE
 
+	EXPORT station_id_layout := RECORD
+		STRING id;
+	END;
+
+	EXPORT state_layout := RECORD
+		STRING2 code;
+		STRING name;
+	END;
+
+	/*
+	NB: even though the following layout is given, "NAME" is not fixed-length.
+	------------------------------
+	Variable   Columns   Type
+	------------------------------
+	CODE          1-2    Character
+	NAME         4-50    Character
+	------------------------------
+	*/
+	EXPORT raw_state_layout := RECORD
+		STRING code_and_name;
+	END;
+
+	EXPORT country_layout := RECORD
+		STRING2 code;
+		STRING name;
+	END;
+	
+	/*
+	NB: even though the following layout is given, "NAME" is not fixed-length.
+	------------------------------
+	Variable   Columns   Type
+	------------------------------
+	CODE          1-2    Character
+	NAME         4-50    Character
+	------------------------------
+	*/
+	EXPORT raw_country_layout := RECORD
+		STRING code_and_name;
+	END;
+	
 	EXPORT station_inventory_layout := RECORD
 		STRING11 id;
 		DECIMAL9_6 latitude;
@@ -7,28 +47,6 @@
 		STRING4 element;
 		INTEGER4 first_year;
 		INTEGER4 last_year;
-	END;
-
-	/*
-	------------------------------
-	Variable   Columns   Type
-	------------------------------
-	ID            1-11   Character
-	LATITUDE     13-20   Real
-	LONGITUDE    22-30   Real
-	ELEMENT      32-35   Character
-	FIRSTYEAR    37-40   Integer
-	LASTYEAR     42-45   Integer
-	------------------------------
-	*/
-	EXPORT raw_station_inventory_layout := RECORD
-		STRING11 id;
-		STRING10 latitude;
-		STRING10 longitude;
-		STRING4 element;
-		STRING5 first_year;
-		STRING5 last_year;
-		STRING1 garbage;
 	END;
 	
 	EXPORT station_layout := RECORD
@@ -174,6 +192,29 @@
 		STRING1 sflag31;
 	END;
 	
+	
+	
+	/*
+	------------------------------
+	Variable   Columns   Type
+	------------------------------
+	ID            1-11   Character
+	LATITUDE     13-20   Real
+	LONGITUDE    22-30   Real
+	ELEMENT      32-35   Character
+	FIRSTYEAR    37-40   Integer
+	LASTYEAR     42-45   Integer
+	------------------------------
+	*/
+	EXPORT raw_station_inventory_layout := RECORD
+		STRING11 id;
+		STRING9 latitude;
+		STRING10 longitude;
+		STRING5 element;
+		STRING5 first_year;
+		STRING5 last_year;
+		STRING1 garbage;
+	END;
 	
 	/*
 	------------------------------

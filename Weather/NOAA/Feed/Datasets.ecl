@@ -15,6 +15,10 @@ EXPORT Datasets := MODULE
 	EXPORT File_Stations := '~weather::stations';
 	EXPORT File_Raw_Stations_Inventory := '~weather::raw::stations_inventory';
 	EXPORT File_Stations_Inventory := '~weather::stations_inventory';
+	EXPORT File_Raw_Countries := '~weather::raw::countries';
+	EXPORT File_Countries := '~weather::countries';
+	EXPORT File_Raw_States := '~weather::raw::states';
+	EXPORT File_States := '~weather::states';
 	
 	
 	EXPORT dsSingleRawDaily(STRING pId) := DATASET(File_Single_Raw_Daily(pId), Layouts.raw_daily_layout, THOR);
@@ -24,5 +28,9 @@ EXPORT Datasets := MODULE
 	EXPORT dsStations := DATASET(File_Stations, Layouts.station_layout, THOR);
 	EXPORT dsRawStationsInventory := DATASET(File_Raw_Stations_Inventory, Layouts.raw_station_inventory_layout, THOR);
 	EXPORT dsStationsInventory := DATASET(File_Stations_Inventory, Layouts.station_inventory_layout, THOR);
+	EXPORT dsRawCountries := DATASET(File_Raw_Countries, Layouts.raw_country_layout, THOR);
+	EXPORT dsCountries := DATASET(File_Countries, Layouts.country_layout, THOR);
+	EXPORT dsRawStates := DATASET(File_Raw_States, Layouts.raw_state_layout, THOR);
+	EXPORT dsStates := DATASET(File_States, Layouts.state_layout, THOR);
 	
 END;

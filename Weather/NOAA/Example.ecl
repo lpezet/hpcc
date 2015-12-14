@@ -1,49 +1,14 @@
 ﻿IMPORT Weather.NOAA.Feed.Datasets;
 IMPORT Weather.NOAA.Feed.Tranxform;
 IMPORT Weather.NOAA.Feed.Extract;
+IMPORT Weather.NOAA.Feed.Setup;
+IMPORT Weather.NOAA.Feed.Layouts;
 
 IMPORT Weather.Util.GeometryLite as Geometry;
 
 IMPORT Linux.Curl;
 
-// ##########################
-// Stations
-// ##########################
-Stations() := FUNCTION
-	RETURN SEQUENTIAL(
-			OUTPUT(Curl.download('http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt', '/var/lib/HPCCSystems/mydropzone/ghcnd-stations.txt', false), NAMED('Stations') ),
-			Extract.stations.doIt(),
-			Tranxform.stations.doIt()
-		);
-END;
-
-// ##########################
-// Stations Inventory
-// ##########################
-StationsInventory() := FUNCTION
-	RETURN SEQUENTIAL(
-			OUTPUT(Curl.download('http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-inventory.txt', '/var/lib/HPCCSystems/mydropzone/ghcnd-inventory.txt', false), NAMED('StationsInventory') ),
-			Extract.stations_inventory.doIt(),
-			Tranxform.stations_inventory.doIt()
-		);
-END;
-
-// ##########################
-// Single Station
-// ##########################
-SingleStation() := FUNCTION
-	RETURN SEQUENTIAL(
-			OUTPUT(Curl.download('http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/US1COEP0020.dly', '/var/lib/HPCCSystems/mydropzone/US1COEP0020.dly', false), NAMED('US1COEP0020') ),
-			Extract.daily('US1COEP0020').doIt(),
-			Tranxform.daily.doIt()
-	);
-END;
-
-Setup := MACRO
-	Stations();
-	StationsInventory();
-	SingleStation();
-ENDMACRO;
+IMPORT Std;
 
 Example1 := MACRO
 	Datasets.dsStations(id = 'US1COEP0020');
@@ -87,9 +52,17 @@ ENDMACRO;
 
 
 // 1. Setup
-//Setup();
+Setup.Basics();
+
+// 1.b Setup daily files for certain stations
+/*
+oStations := DATASET([ 
+	{'USW00014838' }, { 'USC00144559' } , { 'USC00043157' } , { 'USC00117391' } , { 'USW00093820' } 
+	], Layouts.station_id_layout);
+Setup.Daily( oStations );
+*/
 
 // 2. Examples
 //Example1();
 //Example2();
-Example3();
+//Example3();
