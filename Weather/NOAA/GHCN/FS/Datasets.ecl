@@ -3,7 +3,7 @@
 
 
 
-IMPORT Weather.NOAA.Feed.Layouts;
+IMPORT Weather.NOAA.GHCN.FS.Layouts;
 
 
 EXPORT Datasets := MODULE

@@ -6,7 +6,7 @@
 
 // Interesting info:
 // http://www.ncdc.noaa.gov/cdo-web/datasets/GHCNDMS/stations/GHCND:USC00051784/detail
-IMPORT Weather.NOAA.Rest.Layouts;
+IMPORT Weather.NOAA.GHCN.WS.Layouts;
 
 
 EXPORT Services(STRING pBaseUrl, STRING pToken) := MODULE

@@ -1,5 +1,5 @@
-﻿IMPORT Weather.NOAA.Feed.Layouts;
-IMPORT Weather.NOAA.Feed.Datasets;
+﻿IMPORT Weather.NOAA.GHCN.FS.Layouts;
+IMPORT Weather.NOAA.GHCN.FS.Datasets;
 IMPORT Weather.Util.SFile;
 IMPORT Std;
 
