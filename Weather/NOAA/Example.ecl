@@ -1,8 +1,8 @@
-﻿IMPORT Weather.NOAA.Feed.Datasets;
-IMPORT Weather.NOAA.Feed.Tranxform;
-IMPORT Weather.NOAA.Feed.Extract;
-IMPORT Weather.NOAA.Feed.Setup;
-IMPORT Weather.NOAA.Feed.Layouts;
+﻿IMPORT Weather.NOAA.GHCN.FS.Datasets;
+IMPORT Weather.NOAA.GHCN.FS.Tranxform;
+IMPORT Weather.NOAA.GHCN.FS.Extract;
+IMPORT Weather.NOAA.GHCN.FS.Setup;
+IMPORT Weather.NOAA.GHCN.FS.Layouts;
 
 IMPORT Weather.Util.GeometryLite as Geometry;
 

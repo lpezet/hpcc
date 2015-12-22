@@ -1,4 +1,4 @@
-﻿IMPORT Weather.NOAA.Rest;
+﻿IMPORT Weather.NOAA.GHCN.WS AS Rest;
 
 oClient := Rest.Services('http://192.168.0.29:8082/cdo-web/api/v2/', '...');
 
