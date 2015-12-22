@@ -1,5 +1,15 @@
 ﻿EXPORT Layouts := MODULE
 
+	EXPORT element_layout := RECORD
+		STRING name;
+		STRING description;
+		STRING notes;
+	END;
+	
+	EXPORT raw_element_layout := RECORD
+		element_layout;
+	END;
+	
 	EXPORT station_id_layout := RECORD
 		STRING id;
 	END;

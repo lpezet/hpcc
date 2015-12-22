@@ -19,7 +19,8 @@ EXPORT Datasets := MODULE
 	EXPORT File_Countries := '~weather::countries';
 	EXPORT File_Raw_States := '~weather::raw::states';
 	EXPORT File_States := '~weather::states';
-	
+	EXPORT File_Raw_Elements := '~weather::raw::elements';
+	EXPORT File_Elements := '~weather::elements';
 	
 	EXPORT dsSingleRawDaily(STRING pId) := DATASET(File_Single_Raw_Daily(pId), Layouts.raw_daily_layout, THOR);
 	EXPORT dsRawDaily := DATASET(File_Raw_Daily, Layouts.raw_daily_layout, THOR);
@@ -32,5 +33,6 @@ EXPORT Datasets := MODULE
 	EXPORT dsCountries := DATASET(File_Countries, Layouts.country_layout, THOR);
 	EXPORT dsRawStates := DATASET(File_Raw_States, Layouts.raw_state_layout, THOR);
 	EXPORT dsStates := DATASET(File_States, Layouts.state_layout, THOR);
-	
+	EXPORT dsRawElements := DATASET(File_Raw_Elements, Layouts.raw_element_layout, THOR);
+	EXPORT dsElements := DATASET(File_Elements, Layouts.element_layout, THOR);
 END;

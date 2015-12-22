@@ -13,6 +13,14 @@ EXPORT Tranxform := MODULE
 		RETURN OUTPUT(Final_6,, Datasets.File_Stations, OVERWRITE);
 	END;
 	
+	EXPORT elements() := FUNCTION
+		Final_1 := Datasets.dsRawElements;
+		Final_4 := SORT(Final_1, name);
+		Final_5 := DEDUP(Final_4, name);
+		Final_6 := DISTRIBUTE(Final_5, HASH(name));
+		RETURN OUTPUT(Final_6,, Datasets.File_Elements, OVERWRITE);
+	END;
+	
 	EXPORT countries() := FUNCTION
 		Final_1 := Datasets.dsRawCountries;
 		Final_2 := PROJECT(Final_1, TRANSFORM(Layouts.country_layout,

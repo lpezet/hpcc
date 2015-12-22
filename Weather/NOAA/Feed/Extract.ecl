@@ -15,6 +15,13 @@ EXPORT Extract := MODULE
 		RETURN OUTPUT(DS_Dist,, Datasets.File_Raw_Stations, OVERWRITE);
 	END;
 	
+	EXPORT elements() := FUNCTION
+		File_In := BaseDataDirectory + 'ghcnd-elements.txt';
+		DS_In := DATASET(std.File.ExternalLogicalFilename(LandingZone_IP, File_In), Layouts.raw_element_layout,CSV(HEADING(1), SEPARATOR([',']), TERMINATOR(['\n','\r\n','\n\r'])));
+		DS_Dist := DISTRIBUTE(DS_In, HASH(name));
+		RETURN OUTPUT(DS_Dist,, Datasets.File_Raw_Elements, OVERWRITE);
+	END;
+	
 	EXPORT stations_inventory() := FUNCTION
 		File_In := BaseDataDirectory + 'ghcnd-inventory.txt';
 		DS_In := DATASET(std.File.ExternalLogicalFilename(LandingZone_IP, File_In), Layouts.raw_station_inventory_layout,THOR,UNSORTED);//CSV(HEADING(0), SEPARATOR(['']), TERMINATOR(['\n','\r\n','\n\r'])));

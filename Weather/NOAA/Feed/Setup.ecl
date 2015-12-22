@@ -12,18 +12,29 @@ EXPORT Setup := MODULE
 	// ##########################
 	// Stations
 	// ##########################
-	Stations() := FUNCTION
+	EXPORT Stations() := FUNCTION
 		RETURN SEQUENTIAL(
 				OUTPUT(Curl.download('http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt', '/var/lib/HPCCSystems/mydropzone/ghcnd-stations.txt', false), NAMED('Stations') ),
 				Extract.stations(),
 				Tranxform.stations()
 			);
 	END;
+	
+	// ##########################
+	// Elements
+	// ##########################
+	EXPORT Elements() := FUNCTION
+		RETURN SEQUENTIAL(
+				OUTPUT(Curl.download('https://docs.google.com/spreadsheets/d/1LhFzRckqVpg2Dt7SVh38ojRPRLczRoK8v-02qowOTZo/pub?gid=1596064987&single=true&output=csv', '/var/lib/HPCCSystems/mydropzone/ghcnd-elements.txt', true), NAMED('Elements') ),
+				Extract.elements(),
+				Tranxform.elements()
+			);
+	END;
 
 	// ##########################
 	// Stations Inventory
 	// ##########################
-	StationsInventory() := FUNCTION
+	EXPORT StationsInventory() := FUNCTION
 		RETURN SEQUENTIAL(
 				OUTPUT(Curl.download('http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-inventory.txt', '/var/lib/HPCCSystems/mydropzone/ghcnd-inventory.txt', false), NAMED('StationsInventory') ),
 				Extract.stations_inventory(),
@@ -34,7 +45,7 @@ EXPORT Setup := MODULE
 	// ##########################
 	// Countries
 	// ##########################
-	Countries() := FUNCTION
+	EXPORT Countries() := FUNCTION
 		RETURN SEQUENTIAL(
 				OUTPUT(Curl.download('http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-countries.txt', '/var/lib/HPCCSystems/mydropzone/ghcnd-countries.txt', false), NAMED('Countries') ),
 				Extract.countries(),
@@ -45,7 +56,7 @@ EXPORT Setup := MODULE
 	// ##########################
 	// States
 	// ##########################
-	States() := FUNCTION
+	EXPORT States() := FUNCTION
 		RETURN SEQUENTIAL(
 				OUTPUT(Curl.download('http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-states.txt', '/var/lib/HPCCSystems/mydropzone/ghcnd-states.txt', false), NAMED('States') ),
 				Extract.states(),
@@ -56,7 +67,7 @@ EXPORT Setup := MODULE
 	// ##########################
 	// Single Station
 	// ##########################
-	SingleStation() := FUNCTION
+	EXPORT SingleStation() := FUNCTION
 		RETURN SEQUENTIAL(
 				OUTPUT(Curl.download('http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/US1COEP0020.dly', '/var/lib/HPCCSystems/mydropzone/US1COEP0020.dly', false), NAMED('US1COEP0020') ),
 				Extract.daily('US1COEP0020'),
@@ -67,6 +78,7 @@ EXPORT Setup := MODULE
 	EXPORT Basics() := FUNCTION
 		RETURN PARALLEL(
 			Stations(),
+			Elements(),
 			States(),
 			Countries(),
 			StationsInventory()
