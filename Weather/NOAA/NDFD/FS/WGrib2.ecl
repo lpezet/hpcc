@@ -5,6 +5,14 @@
 // mv grib2 /usr/local/share
 // ln -s /usr/local/share/grib2/wgrib2/wgrib2 /usr/bin/wgrib2
 
+// OBSOLETE: (now using "bash -c")
+// Create wrapper to handle missing files:
+// NB: here we're assuming -v is the first argument, and the file to process is the second one!!!!
+// #!/bin/sh
+// [-f $2 ] && wgrib2 $@ || echo "1:0:d=0:ERR:file_not_found::"
+// as /usr/bin/wgrib2_wrapper
+// NB2: don't forget to make it executable
+
 
 EXPORT WGrib2 := MODULE
 
@@ -17,6 +25,7 @@ EXPORT WGrib2 := MODULE
 		STRING z;
 		STRING dtime;
 		STRING other_information;
+		STRING line;
 	END;
 	
 	SHARED inventory_layout line_to_inventory(BinUtils.line_layout pRecord) := TRANSFORM
@@ -28,28 +37,38 @@ EXPORT WGrib2 := MODULE
 		SELF.z := REGEXFIND('(:([^:]+)){4}', pRecord.line, 2);
 		SELF.dtime := REGEXFIND('(:([^:]+)){5}', pRecord.line, 2);
 		SELF.other_information := REGEXFIND('(:([^:]+)){6}', pRecord.line, 2);
+		SELF.line := pRecord.line;
 	END;
 	
-	//TODO: pass some parameters...???
-	// 1. operational vs experimental
-	// 2. area of data: CONUS; 1 of 16 overlapping NDFD CONUS subsectors; Alaska; Hawaii; Guam; or Puerto Rico/the Virgin Islands; Northern Hemisphere; North Pacific Ocean 
-	// 3. Valid Period: could be 001-003 covers Days 1-3; 004-007 covers days 4-7, 008-450 covers days 8-450
-	// 4. FILE NAME = data subcategory containing abbreviated NDFD element names. The current file for each element will be kept until overwritten by a new file for the same element
-	EXPORT download() := MACRO
-	
-	ENDMACRO;
-	
 	EXPORT inventory( STRING localUri ) := FUNCTION
-		A := PIPE('wgrib2 -v ' + localUri, BinUtils.line_layout, CSV(SEPARATOR(''), QUOTE('')) );
+		A := PIPE('bash -c "[ -f ' + localUri + ' ] && wgrib2 -v ' + localUri + '|| echo 1:0:d=0:ERR:file_not_found::"', BinUtils.line_layout, CSV(SEPARATOR(''), QUOTE('')) );
 		B := PROJECT(A, line_to_inventory(LEFT) );
 		RETURN B;
 	END;
 	
 	EXPORT to_csv( STRING sourceLocalUri, STRING targetLocalUri ) := FUNCTION
-		A := PIPE('wgrib2 -v ' + sourceLocalUri + ' -csv ' + targetLocalUri, BinUtils.line_layout, CSV(SEPARATOR(''), QUOTE('')) );
+		A := PIPE('bash -c "[ -f ' + sourceLocalUri + ' ] && wgrib2 -v ' + sourceLocalUri + ' -csv ' + targetLocalUri + '|| echo 1:0:d=0:ERR:file_not_found::"', BinUtils.line_layout, CSV(SEPARATOR(''), QUOTE('')) );
 		B := PROJECT(A, line_to_inventory(LEFT) );
 		RETURN B;
 	END;
 	
+	EXPORT batch_layout := RECORD
+		STRING sourceUri;
+		STRING targetUri;
+	END;
+	
+	EXPORT batch_result_layout := RECORD
+		STRING sourceUri;
+		STRING targetUri;
+		inventory_layout;
+	END;
+	
+	SHARED batch_result_layout BatchCSV (batch_layout pInput) := TRANSFORM
+		SELF.sourceUri := pInput.sourceUri;
+		SELF.targetUri := pInput.targetUri;
+		SELF := to_csv(pInput.sourceUri, pInput.targetUri)[1];
+	END;
 
+	EXPORT batch_to_csv( DATASET(batch_layout) batch ) := NORMALIZE( batch, 1, BatchCSV(LEFT) );
+	
 END;
