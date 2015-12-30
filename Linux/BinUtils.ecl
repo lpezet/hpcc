@@ -7,6 +7,11 @@ EXPORT BinUtils := MODULE
 		STRING line;
 		STRING2 nl := '\r\n';
 	END;
+	
+	EXPORT checksum_layout := RECORD
+		STRING md5;
+		STRING uri;
+	END;
 
 	EXPORT cat( STRING localUri ) := PIPE('cat ' + localUri, line_layout, CSV(SEPARATOR(''), QUOTE('')) );
 	
@@ -18,6 +23,8 @@ EXPORT BinUtils := MODULE
 	END;
 	
 	EXPORT rm( STRING localUri ) := PIPE('rm -v ' + localUri, line_layout, CSV(SEPARATOR(''), QUOTE('')) );
+	
+	EXPORT checksum( STRING localUri ) := PIPE('md5sum ' + localUri, checksum_layout, CSV(SEPARATOR('  ')) );
 	
 	//EXPORT cron( STRING schedule, STRING job ) := PIPE('cron
 END;
